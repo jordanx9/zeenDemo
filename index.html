@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zeen Property Search - Reimagining Home Buying</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Zeen<span>Home</span></h1>
+            <nav>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#services">Services</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="showcase">
+        <div class="container">
+            <h1>Reimagining Home Buying</h1>
+            <p>Experience a revolutionary approach to finding and purchasing your dream home.</p>
+            <a href="#stages" class="cta-button">Start Your Journey</a>
+        </div>
+    </section>
+
+    <section id="stages">
+        <div class="container">
+            <h2>Your Path to Home Ownership</h2>
+            <div class="card-container">
+                <div class="card" id="card1">
+                    <div class="card-icon">🏠</div>
+                    <h3>Stage 1: Concierge</h3>
+                    <p>Get personalized guidance to prepare for your home buying journey.</p>
+                    <button class="card-button">Learn More</button>
+                </div>
+                <div class="card" id="card2">
+                    <div class="card-icon">🔍</div>
+                    <h3>Stage 2: Extension</h3>
+                    <p>Discover your perfect home with our advanced property matching system.</p>
+                    <button class="card-button">Explore</button>
+                </div>
+                <div class="card" id="card3">
+                    <div class="card-icon">🎉</div>
+                    <h3>Stage 3: Close</h3>
+                    <p>Finalize your purchase with our streamlined closing process.</p>
+                    <button class="card-button">Get Started</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Stage 1: Concierge Service</h2>
+            <form id="conciergeForm">
+                <div class="form-group">
+                    <label for="documents">Upload Required Documents:</label>
+                    <input type="file" id="documents" name="documents" multiple>
+                </div>
+                <div class="form-group">
+                    <label for="income">Annual Income:</label>
+                    <input type="number" id="income" name="income" required>
+                </div>
+                <div class="form-group">
+                    <label for="creditScore">Credit Score:</label>
+                    <input type="number" id="creditScore" name="creditScore" min="300" max="850" required>
+                </div>
+                <button type="submit" class="submit-button">Submit for Verification</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal2" class="modal">
+        <div class="modal-content extension-dashboard">
+            <span class="close">&times;</span>
+            <h2>Zeen Extension Dashboard</h2>
+            <div class="dashboard-container">
+                <div class="sidebar">
+                    <h3>Your Preferences</h3>
+                    <ul class="preference-list">
+                        <li><strong>Price Range:</strong> $300,000 - $500,000</li>
+                        <li><strong>Bedrooms:</strong> 3+</li>
+                        <li><strong>Location:</strong> Downtown, Suburbia</li>
+                        <li><strong>Property Type:</strong> House, Condo</li>
+                    </ul>
+                    <button class="edit-preferences">Edit Preferences</button>
+                </div>
+                <div class="main-content">
+                    <div class="alert-box">
+                        <h3>New Match Found!</h3>
+                        <p>A property matching your preferences was just listed on Zillow.</p>
+                        <button class="view-property">View Property</button>
+                    </div>
+                    <h3>Recently Saved Properties</h3>
+                    <div class="property-grid">
+                        <div class="property-card">
+                            <img src="https://via.placeholder.com/150" alt="Property 1">
+                            <h4>Cozy Downtown Condo</h4>
+                            <p>$350,000 | 2 bed | 2 bath</p>
+                            <span class="source-tag">Realtor.com</span>
+                        </div>
+                        <div class="property-card">
+                            <img src="https://via.placeholder.com/150" alt="Property 2">
+                            <h4>Spacious Suburban House</h4>
+                            <p>$450,000 | 4 bed | 3 bath</p>
+                            <span class="source-tag">Zillow</span>
+                        </div>
+                        <div class="property-card">
+                            <img src="https://via.placeholder.com/150" alt="Property 3">
+                            <h4>Modern City Apartment</h4>
+                            <p>$320,000 | 2 bed | 1 bath</p>
+                            <span class="source-tag">Trulia</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal3" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Stage 3: Closing Process</h2>
+            <div id="closeSteps">
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="inspector">
+                    <label for="inspector">Schedule Home Inspection</label>
+                </div>
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="insurance">
+                    <label for="insurance">Obtain Home Insurance</label>
+                </div>
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="titleCompany">
+                    <label for="titleCompany">Choose Title Company</label>
+                </div>
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="finalWalkthrough">
+                    <label for="finalWalkthrough">Schedule Final Walkthrough</label>
+                </div>
+            </div>
+            <button id="completePurchase" class="submit-button">Complete Purchase</button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Zeen Property Search. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
