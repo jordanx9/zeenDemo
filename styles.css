@@ -82,6 +82,12 @@ nav a:hover {
     overflow: hidden;
 }
 
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
 .showcase-wrapper {
     display: flex;
     justify-content: space-between;
@@ -92,11 +98,13 @@ nav a:hover {
 .showcase-content {
     flex: 1;
     padding-right: 2rem;
+    max-width: 50%;
 }
 
 .showcase-content h1 {
     font-size: 3.5rem;
     margin-bottom: 1rem;
+    white-space: nowrap;
 }
 
 .showcase-content p {
@@ -119,54 +127,83 @@ nav a:hover {
     background-color: #6a4ed6;
 }
 
-.puzzle-3d {
+.road-3d {
     flex: 1;
-    height: 300px;
+    height: 400px;
     position: relative;
     perspective: 1000px;
-}
-
-.puzzle-piece {
-    width: 100px;
-    height: 100px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
     transform-style: preserve-3d;
-    animation: rotatePuzzle 20s infinite linear;
 }
 
-.piece1 { transform: translate3d(-50%, -50%, 50px); }
-.piece2 { transform: translate3d(25px, -75px, 25px); }
-.piece3 { transform: translate3d(-125px, -25px, 25px); }
-.piece4 { transform: translate3d(-50%, 25px, 50px); }
-
-.face {
+.road {
     position: absolute;
-    width: 100%;
-    height: 100%;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 15px;
+    width: 300px;
+    height: 600px;
+    background-color: #333;
+    transform: rotateX(60deg) translateZ(-150px) translateY(-100px);
 }
 
-.piece1 .face { background-color: rgba(124, 92, 246, 0.7); }
-.piece2 .face { background-color: rgba(246, 92, 124, 0.7); }
-.piece3 .face { background-color: rgba(92, 246, 124, 0.7); }
-.piece4 .face { background-color: rgba(246, 224, 92, 0.7); }
-
-.front  { transform: rotateY(0deg) translateZ(50px); }
-.back   { transform: rotateY(180deg) translateZ(50px); }
-.right  { transform: rotateY(90deg) translateZ(50px); }
-.left   { transform: rotateY(-90deg) translateZ(50px); }
-.top    { transform: rotateX(90deg) translateZ(50px); }
-.bottom { transform: rotateX(-90deg) translateZ(50px); }
-
-@keyframes rotatePuzzle {
-    0% { transform: translate3d(-50%, -50%, 0) rotateX(0deg) rotateY(0deg); }
-    100% { transform: translate3d(-50%, -50%, 0) rotateX(360deg) rotateY(360deg); }
+.milestone {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-color: #7c5cf6;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    transform-style: preserve-3d;
 }
 
-@media (max-width: 768px) {
+.milestone::after {
+    content: attr(data-stage);
+    font-size: 24px;
+    color: #fff;
+}
+
+.milestone[data-stage="1"] {
+    transform: translate3d(125px, 300px, 50px);
+}
+
+.milestone[data-stage="2"] {
+    transform: translate3d(0, 150px, 25px);
+}
+
+.milestone[data-stage="3"] {
+    transform: translate3d(125px, 0, 0);
+}
+
+.milestone-label {
+    position: absolute;
+    white-space: nowrap;
+    font-size: 14px;
+    transform: translateY(40px);
+}
+
+.avatar {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-color: #fff;
+    border-radius: 50%;
+    transform-style: preserve-3d;
+    animation: moveAvatar 10s infinite ease-in-out;
+}
+
+@keyframes moveAvatar {
+    0%, 100% {
+        transform: translate3d(135px, 350px, 60px);
+    }
+    33% {
+        transform: translate3d(10px, 200px, 35px);
+    }
+    66% {
+        transform: translate3d(135px, 50px, 10px);
+    }
+}
+
+@media (max-width: 1024px) {
     .showcase-wrapper {
         flex-direction: column;
         text-align: center;
@@ -175,11 +212,42 @@ nav a:hover {
     .showcase-content {
         padding-right: 0;
         margin-bottom: 2rem;
+        max-width: 100%;
     }
     
-    .puzzle-3d {
+    .road-3d {
         width: 100%;
-        height: 200px;
+        height: 300px;
+    }
+
+    .road {
+        width: 250px;
+        height: 500px;
+        transform: rotateX(60deg) translateZ(-125px) translateY(-50px);
+    }
+
+    .milestone[data-stage="1"] {
+        transform: translate3d(100px, 250px, 50px);
+    }
+
+    .milestone[data-stage="2"] {
+        transform: translate3d(0, 125px, 25px);
+    }
+
+    .milestone[data-stage="3"] {
+        transform: translate3d(100px, 0, 0);
+    }
+
+    @keyframes moveAvatar {
+        0%, 100% {
+            transform: translate3d(110px, 300px, 60px);
+        }
+        33% {
+            transform: translate3d(10px, 175px, 35px);
+        }
+        66% {
+            transform: translate3d(110px, 50px, 10px);
+        }
     }
 }
 
