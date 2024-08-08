@@ -77,13 +77,113 @@ nav a:hover {
     height: 100vh;
     display: flex;
     align-items: center;
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://source.unsplash.com/random/1600x900/?modern-house') no-repeat center center/cover;
-    color: var(--white);
-    text-align: center;
-    padding-top: 80px;
+    background-color: #4a4a4a;
+    color: #ffffff;
+    overflow: hidden;
 }
 
-#showcase h1 {
+.showcase-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.showcase-content {
+    flex: 1;
+    padding-right: 2rem;
+}
+
+.showcase-content h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+}
+
+.showcase-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.cta-button {
+    display: inline-block;
+    background-color: #7c5cf6;
+    color: #ffffff;
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+    background-color: #6a4ed6;
+}
+
+.puzzle-3d {
+    flex: 1;
+    height: 300px;
+    position: relative;
+    perspective: 1000px;
+}
+
+.puzzle-piece {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-style: preserve-3d;
+    animation: rotatePuzzle 20s infinite linear;
+}
+
+.piece1 { transform: translate3d(-50%, -50%, 50px); }
+.piece2 { transform: translate3d(25px, -75px, 25px); }
+.piece3 { transform: translate3d(-125px, -25px, 25px); }
+.piece4 { transform: translate3d(-50%, 25px, 50px); }
+
+.face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 15px;
+}
+
+.piece1 .face { background-color: rgba(124, 92, 246, 0.7); }
+.piece2 .face { background-color: rgba(246, 92, 124, 0.7); }
+.piece3 .face { background-color: rgba(92, 246, 124, 0.7); }
+.piece4 .face { background-color: rgba(246, 224, 92, 0.7); }
+
+.front  { transform: rotateY(0deg) translateZ(50px); }
+.back   { transform: rotateY(180deg) translateZ(50px); }
+.right  { transform: rotateY(90deg) translateZ(50px); }
+.left   { transform: rotateY(-90deg) translateZ(50px); }
+.top    { transform: rotateX(90deg) translateZ(50px); }
+.bottom { transform: rotateX(-90deg) translateZ(50px); }
+
+@keyframes rotatePuzzle {
+    0% { transform: translate3d(-50%, -50%, 0) rotateX(0deg) rotateY(0deg); }
+    100% { transform: translate3d(-50%, -50%, 0) rotateX(360deg) rotateY(360deg); }
+}
+
+@media (max-width: 768px) {
+    .showcase-wrapper {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .showcase-content {
+        padding-right: 0;
+        margin-bottom: 2rem;
+    }
+    
+    .puzzle-3d {
+        width: 100%;
+        height: 200px;
+    }
+}
+
+/* #showcase h1 {
     font-size: 3.5rem;
     margin-bottom: 1rem;
     animation: fadeInUp 1s ease-out;
@@ -93,9 +193,9 @@ nav a:hover {
     font-size: 1.5rem;
     margin-bottom: 2rem;
     animation: fadeInUp 1s ease-out 0.5s both;
-}
+} */
 
-.cta-button {
+/* .cta-button {
     display: inline-block;
     background-color: var(--primary-color);
     color: var(--white);
@@ -111,7 +211,7 @@ nav a:hover {
     background-color: var(--secondary-color);
     transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
+} */
 
 #stages {
     padding: 5rem 0;
@@ -419,6 +519,7 @@ footer {
     border-radius: 8px;
     overflow: hidden;
     transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
 }
 
 .property-card:hover {
@@ -455,4 +556,103 @@ footer {
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
+}
+
+#employedFields,
+#selfEmployedFields {
+    margin-top: 15px;
+}
+
+#requiredDocuments {
+    margin-top: 20px;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+#requiredDocuments h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+#documentList {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+#documentList li {
+    margin-bottom: 8px;
+    padding-left: 20px;
+    position: relative;
+}
+
+#documentList li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: #4a90e2;
+}
+
+/* Property Details Modal Styles */
+.property-details {
+    max-width: 800px;
+    width: 90%;
+}
+
+.property-details h2 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+#propertyDetails p {
+    margin-bottom: 10px;
+}
+
+#costBreakdown {
+    margin-top: 30px;
+}
+
+#costBreakdown h3 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+#costTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+#costTable th, #costTable td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+#costTable th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+#totalCost {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .dashboard-container {
+        flex-direction: column;
+    }
+    
+    .property-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .property-grid {
+        grid-template-columns: 1fr;
+    }
 }

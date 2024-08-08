@@ -6,6 +6,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeButtons = document.querySelectorAll('.close');
     const ctaButton = document.querySelector('.cta-button');
 
+    // Elements for the concierge modal
+    const employmentStatus = document.getElementById('employmentStatus');
+    const employedFields = document.getElementById('employedFields');
+    const selfEmployedFields = document.getElementById('selfEmployedFields');
+    const documentList = document.getElementById('documentList');
+    const conciergeForm = document.getElementById('conciergeForm');
+
+    // Elements for the property details modal
+    const propertyCards = document.querySelectorAll('.property-card');
+    const propertyDetailsModal = document.getElementById('propertyDetailsModal');
+    const propertyTitle = document.getElementById('propertyTitle');
+    const propertyDetails = document.getElementById('propertyDetails');
+    const costTable = document.getElementById('costTable');
+    const totalCost = document.getElementById('totalCost');
+
     // Smooth scroll functionality for the CTA button
     ctaButton.addEventListener('click', function(e) {
         e.preventDefault();
@@ -13,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
         stagesSection.scrollIntoView({ behavior: 'smooth' });
     });
 
-    // Add hover effects to cards
+    // Add hover effects to main stage cards
     cards.forEach(card => {
         card.addEventListener('mouseenter', function() {
             this.style.transform = 'translateY(-10px)';
@@ -64,57 +79,77 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Form submission handler for the concierge form (Stage 1)
-    document.getElementById('conciergeForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const income = document.getElementById('income').value;
-        const creditScore = document.getElementById('creditScore').value;
+    // Concierge modal functionality
+    employmentStatus.addEventListener('change', function() {
+        if (this.value === 'employed') {
+            employedFields.style.display = 'block';
+            selfEmployedFields.style.display = 'none';
+        } else if (this.value === 'selfEmployed') {
+            employedFields.style.display = 'none';
+            selfEmployedFields.style.display = 'block';
+        } else {
+            employedFields.style.display = 'none';
+            selfEmployedFields.style.display = 'none';
+        }
+        updateRequiredDocuments();
+    });
+
+    function updateRequiredDocuments() {
+        const status = employmentStatus.value;
+        documentList.innerHTML = '';
         
-        if (income > 50000 && creditScore > 700) {
-            showNotification("Congratulations! You've been pre-approved. Let's move to the property search stage.", 'success');
+        const commonDocuments = [
+            'Government-issued photo ID',
+            'Social Security number',
+            'Bank statements for the last 2 months',
+            'W-2 forms for the last 2 years',
+            'Federal tax returns for the last 2 years'
+        ];
+
+        const employedDocuments = [
+            'Pay stubs for the last 30 days',
+            'Employment verification letter'
+        ];
+
+        const selfEmployedDocuments = [
+            'Profit and loss statement',
+            'Business license',
+            'Business tax returns for the last 2 years'
+        ];
+
+        let requiredDocs = commonDocuments;
+
+        if (status === 'employed') {
+            requiredDocs = requiredDocs.concat(employedDocuments);
+        } else if (status === 'selfEmployed') {
+            requiredDocs = requiredDocs.concat(selfEmployedDocuments);
+        }
+
+        requiredDocs.forEach(doc => {
+            const li = document.createElement('li');
+            li.textContent = doc;
+            documentList.appendChild(li);
+        });
+    }
+
+    conciergeForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const annualIncome = formData.get('annualIncome');
+        const creditScore = formData.get('creditScore');
+        
+        if (annualIncome > 50000 && creditScore > 620) {
+            showNotification("Great news! Based on the information provided, you appear to be ready for the next steps in the home buying process. Let's move forward!", 'success');
+            // Here you would typically send the form data to your server
             closeModal(document.getElementById('modal1'));
             setTimeout(() => openModal('modal2'), 500);
         } else {
-            showNotification("Based on the information provided, we've prepared a personalized readiness plan for you. An advisor will contact you shortly.", 'info');
+            showNotification("Based on the information provided, we've prepared a personalized readiness plan to help you improve your home buying position. An advisor will contact you shortly with more details.", 'info');
         }
     });
 
-    // Form submission handler for the property search form (Stage 2)
-    // document.getElementById('searchForm').addEventListener('submit', function(e) {
-    //     e.preventDefault();
-    //     showNotification("Searching for properties... In a real application, this would display matching properties.", 'info');
-    // });
-
-    // Click event handler for the complete purchase button (Stage 3)
-    document.getElementById('completePurchase').addEventListener('click', function() {
-        const checkboxes = document.querySelectorAll('#closeSteps input[type="checkbox"]');
-        const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
-
-        if (allChecked) {
-            showNotification("Congratulations! You've completed all the necessary steps. Your home purchase is now complete!", 'success');
-        } else {
-            showNotification("Please complete all the required steps before finalizing your purchase.", 'warning');
-        }
-    });
-
-    // Notification system
-    function showNotification(message, type) {
-        const notification = document.createElement('div');
-        notification.className = `notification ${type}`;
-        notification.textContent = message;
-        document.body.appendChild(notification);
-
-        setTimeout(() => {
-            notification.classList.add('show');
-        }, 10);
-
-        setTimeout(() => {
-            notification.classList.remove('show');
-            setTimeout(() => {
-                document.body.removeChild(notification);
-            }, 300);
-        }, 5000);
-    }
+    // Initialize the document list
+    updateRequiredDocuments();
 
     // Extension Dashboard Functionality (Stage 2)
     const viewPropertyBtn = document.querySelector('.view-property');
@@ -144,9 +179,89 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 2000);
     }, 10000);
 
-    // Add hover effects to property cards in the extension dashboard
-    const propertyCards = document.querySelectorAll('.property-card');
+    // Mock data for properties
+    const propertyData = {
+        1: {
+            title: "Cozy Downtown Condo",
+            price: 350000,
+            bedrooms: 2,
+            bathrooms: 2,
+            sqft: 1000,
+            yearBuilt: 2015,
+            address: "123 Main St, Downtown, City",
+            description: "A beautiful condo in the heart of downtown, perfect for young professionals.",
+            closingCosts: 10500,
+            propertyTax: 3500,
+            homeInsurance: 1200
+        },
+        2: {
+            title: "Spacious Suburban House",
+            price: 450000,
+            bedrooms: 4,
+            bathrooms: 3,
+            sqft: 2200,
+            yearBuilt: 2005,
+            address: "456 Oak Lane, Suburbia, City",
+            description: "A family-friendly home with a large backyard in a quiet neighborhood.",
+            closingCosts: 13500,
+            propertyTax: 4500,
+            homeInsurance: 1500
+        },
+        3: {
+            title: "Modern City Apartment",
+            price: 320000,
+            bedrooms: 2,
+            bathrooms: 1,
+            sqft: 850,
+            yearBuilt: 2020,
+            address: "789 High St, Cityville, City",
+            description: "A sleek, modern apartment with amazing city views and top-notch amenities.",
+            closingCosts: 9600,
+            propertyTax: 3200,
+            homeInsurance: 1100
+        }
+    };
+
+    // Add click event listeners to property cards
     propertyCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const propertyId = this.dataset.id;
+            const property = propertyData[propertyId];
+            
+            if (property) {
+                propertyTitle.textContent = property.title;
+                propertyDetails.innerHTML = `
+                    <p><strong>Price:</strong> $${property.price.toLocaleString()}</p>
+                    <p><strong>Bedrooms:</strong> ${property.bedrooms}</p>
+                    <p><strong>Bathrooms:</strong> ${property.bathrooms}</p>
+                    <p><strong>Square Feet:</strong> ${property.sqft}</p>
+                    <p><strong>Year Built:</strong> ${property.yearBuilt}</p>
+                    <p><strong>Address:</strong> ${property.address}</p>
+                    <p>${property.description}</p>
+                `;
+    
+                // Clear previous cost table rows
+                while (costTable.rows.length > 1) {
+                    costTable.deleteRow(1);
+                }
+    
+                // Add rows to cost table
+                addCostRow("Property Price", property.price);
+                addCostRow("Closing Costs", property.closingCosts);
+                addCostRow("Property Tax (Annual)", property.propertyTax);
+                addCostRow("Home Insurance (Annual)", property.homeInsurance);
+    
+                const totalCostValue = property.price + property.closingCosts + property.propertyTax + property.homeInsurance;
+                totalCost.textContent = `Total Cost: $${totalCostValue.toLocaleString()}`;
+    
+                openModal('propertyDetailsModal');
+            } else {
+                console.error(`Property with id ${propertyId} not found`);
+                alert("Sorry, the details for this property are not available.");
+            }
+        });
+
+        // Add hover effects to property cards
         card.addEventListener('mouseenter', function() {
             this.style.transform = 'translateY(-5px)';
             this.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
@@ -156,13 +271,47 @@ document.addEventListener('DOMContentLoaded', function() {
             this.style.transform = 'translateY(0)';
             this.style.boxShadow = 'none';
         });
-
-        // Simulating clicking on a property card
-        card.addEventListener('click', function() {
-            const propertyName = this.querySelector('h4').textContent;
-            alert(`You clicked on ${propertyName}. In a real application, this would show more details or open the listing.`);
-        });
     });
+
+    // Helper function to add rows to the cost table
+    function addCostRow(item, cost) {
+        const row = costTable.insertRow(-1);
+        const itemCell = row.insertCell(0);
+        const costCell = row.insertCell(1);
+        itemCell.textContent = item;
+        costCell.textContent = `$${cost.toLocaleString()}`;
+    }
+
+    // Closing process functionality (Stage 3)
+    document.getElementById('completePurchase').addEventListener('click', function() {
+        const checkboxes = document.querySelectorAll('#closeSteps input[type="checkbox"]');
+        const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+
+        if (allChecked) {
+            showNotification("Congratulations! You've completed all the necessary steps. Your home purchase is now complete!", 'success');
+        } else {
+            showNotification("Please complete all the required steps before finalizing your purchase.", 'warning');
+        }
+    });
+
+    // Notification system
+    function showNotification(message, type) {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 10);
+
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                document.body.removeChild(notification);
+            }, 300);
+        }, 5000);
+    }
 
     // Accessibility: Add keyboard navigation for modals
     document.addEventListener('keydown', function(e) {
