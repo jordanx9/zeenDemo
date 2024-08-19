@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zeen Property Search - Reimagining Home Buying</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <title>ZeenHome</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/quiz.css">
+    <link rel="stylesheet" href="css/progress-tracker.css">
 </head>
 <body>
     <header>
@@ -14,7 +16,7 @@
         </div>
     </header>
 
-    <section id="showcase">
+    <div id="showcase" class="section">
         <div class="container">
             <div class="showcase-wrapper">
                 <div class="showcase-content">
@@ -58,25 +60,25 @@
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section id="stages">
+    <div id="stages" class="section">
         <div class="container">
             <h2>Your Path to Home Ownership</h2>
             <div class="card-container">
-                <div class="card" id="card1">
+                <div id="card1" class="card">
                     <div class="card-icon">🏠</div>
                     <h3>Stage 1: Readiness</h3>
                     <p>Get personalized guidance to prepare for your home buying journey.</p>
                     <button class="card-button">Learn More</button>
                 </div>
-                <div class="card" id="card2">
+                <div id="card2" class="card">
                     <div class="card-icon">🔍</div>
                     <h3>Stage 2: Extension</h3>
                     <p>Discover your perfect home with our advanced property matching system.</p>
                     <button class="card-button">Explore</button>
                 </div>
-                <div class="card" id="card3">
+                <div id="card3" class="card">
                     <div class="card-icon">🎉</div>
                     <h3>Stage 3: Close</h3>
                     <p>Finalize your purchase with our streamlined closing process.</p>
@@ -84,65 +86,14 @@
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
     <div id="modal1" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Stage 1: Buyer Readiness</h2>
-            <form id="conciergeForm">
-                <div class="form-group">
-                    <label for="employmentStatus">Employment Status:</label>
-                    <select id="employmentStatus" name="employmentStatus" required>
-                        <option value="">Select your employment status</option>
-                        <option value="employed">Employed by an employer</option>
-                        <option value="selfEmployed">Self-employed</option>
-                    </select>
-                </div>
-    
-                <div id="employedFields" style="display: none;">
-                    <div class="form-group">
-                        <label for="employerName">Employer Name:</label>
-                        <input type="text" id="employerName" name="employerName">
-                    </div>
-                    <div class="form-group">
-                        <label for="employmentLength">Length of Employment:</label>
-                        <input type="number" id="employmentLength" name="employmentLength" min="0" step="0.5"> years
-                    </div>
-                </div>
-    
-                <div id="selfEmployedFields" style="display: none;">
-                    <div class="form-group">
-                        <label for="businessName">Business Name:</label>
-                        <input type="text" id="businessName" name="businessName">
-                    </div>
-                    <div class="form-group">
-                        <label for="yearsInBusiness">Years in Business:</label>
-                        <input type="number" id="yearsInBusiness" name="yearsInBusiness" min="0" step="0.5">
-                    </div>
-                </div>
-    
-                <div class="form-group">
-                    <label for="annualIncome">Annual Income:</label>
-                    <input type="number" id="annualIncome" name="annualIncome" required>
-                </div>
-    
-                <div class="form-group">
-                    <label for="creditScore">Credit Score:</label>
-                    <input type="number" id="creditScore" name="creditScore" min="300" max="850" required>
-                </div>
-    
-                <div id="requiredDocuments">
-                    <h3>Required Documents:</h3>
-                    <ul id="documentList"></ul>
-                </div>
-    
-                <div class="form-group">
-                    <label for="documents">Upload Required Documents:</label>
-                    <input type="file" id="documents" name="documents" multiple>
-                </div>
-    
-                <button type="submit" class="submit-button">Submit for Verification</button>
+            <form id="readinessQuiz">
+                <!-- The quiz will be dynamically inserted here -->
             </form>
         </div>
     </div>
@@ -154,7 +105,7 @@
             <div class="dashboard-container">
                 <div class="sidebar">
                     <h3>Your Preferences</h3>
-                    <ul class="preference-list">
+                    <ul>
                         <li><strong>Price Range:</strong> $300,000 - $500,000</li>
                         <li><strong>Bedrooms:</strong> 3+</li>
                         <li><strong>Location:</strong> Downtown, Suburbia</li>
@@ -167,6 +118,13 @@
                         <h3>New Match Found!</h3>
                         <p>A property matching your preferences was just listed on Zillow.</p>
                         <button class="view-property">View Property</button>
+                    </div>
+                    <div id="quizResults"></div>
+                    <div id="progressTracker">
+                        <h3>Track Your Progress</h3>
+                        <div id="creditScoreProgress" class="progress-bar"></div>
+                        <button id="updateCreditScore">Update Credit Score</button>
+                        <!-- Add similar elements for other progress categories -->
                     </div>
                     <h3>Recently Saved Properties</h3>
                     <div class="property-grid">
@@ -219,8 +177,8 @@
             <h2>Stage 3: Closing Process</h2>
             <div id="closeSteps">
                 <div class="form-group checkbox-group">
-                    <input type="checkbox" id="inspector">
-                    <label for="inspector">Schedule Home Inspection</label>
+                    <input type="checkbox" id="inspection">
+                    <label for="inspection">Schedule Home Inspection</label>
                 </div>
                 <div class="form-group checkbox-group">
                     <input type="checkbox" id="insurance">
@@ -245,6 +203,6 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>
