@@ -52,24 +52,48 @@ function showEducationalContent() {
     const modalContent = document.querySelector('#modal1 .modal-content');
     modalContent.innerHTML = `
         <h2>Before We Begin</h2>
-        <div id="educationalContent"></div>
+        <p>Here's some helpful information about home buying. Feel free to explore these topics:</p>
+        <div id="educationalCards"></div>
         <button id="startQuiz" class="submit-button">I'm Ready to Start the Quiz</button>
     `;
 
     const educationalContent = getEducationalContent();
-    const contentContainer = document.getElementById('educationalContent');
+    const cardsContainer = document.getElementById('educationalCards');
 
     for (const [key, value] of Object.entries(educationalContent)) {
-        const section = document.createElement('div');
-        section.className = 'education-item';
-        section.innerHTML = `
+        const card = document.createElement('div');
+        card.className = 'education-card';
+        card.id = `${key}Card`;
+        card.innerHTML = `
             <h3>${value.title}</h3>
-            <p>${value.content}</p>
+            <p>${value.summary}</p>
         `;
-        contentContainer.appendChild(section);
+        card.addEventListener('click', () => showDetailedContent(key, value));
+        cardsContainer.appendChild(card);
     }
 
     document.getElementById('startQuiz').addEventListener('click', createQuiz);
+}
+
+function showDetailedContent(key, content) {
+    const detailedContent = document.createElement('div');
+    detailedContent.className = 'detailed-content';
+    detailedContent.innerHTML = `
+        <h3>${content.title}</h3>
+        ${content.content}
+        <button class="back-button">Back to Topics</button>
+    `;
+
+    const modalContent = document.querySelector('#modal1 .modal-content');
+    modalContent.appendChild(detailedContent);
+
+    detailedContent.querySelector('.back-button').addEventListener('click', () => {
+        detailedContent.remove();
+        const card = document.getElementById(`${key}Card`);
+        if (card) {
+            card.classList.add('viewed');
+        }
+    });
 }
 
 /**
