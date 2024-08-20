@@ -2,6 +2,7 @@ import { initializeModalListeners } from './modal.js';
 import { initializeReadinessQuiz } from './readiness-quiz.js';
 import { initializeProgressTracker } from './progress-tracker.js';
 import { loadEducationalContent } from './educational-content.js';
+import { initializePropertyDetails } from './property-details.js';
 
 function initializeApp() {
     initializeModalListeners();
@@ -11,6 +12,7 @@ function initializeApp() {
     initializeProgressTracker();
     loadEducationalContent();
     initializeResponsiveDesign();
+    initializePropertyDetails();
 }
 
 // Ensure all initializations happen after DOM is loaded
