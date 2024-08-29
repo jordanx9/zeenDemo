@@ -1,15 +1,42 @@
-/**
- * Educational content for buyer readiness
- */
+// Define the educational content for different topics
 const educationalContent = {
+    employed: {
+        title: "Information for Employed Individuals",
+        summary: "Learn about mortgage considerations for employed individuals",
+        content: `
+            <p>As an employed individual, here are some key points to consider:</p>
+            <ul>
+                <li>Stable income is viewed favorably by lenders</li>
+                <li>You'll need to provide recent pay stubs and W-2 forms</li>
+                <li>Length of employment at your current job may be a factor</li>
+                <li>Lenders typically like to see at least two years of consistent employment</li>
+            </ul>
+        `
+    },
+    selfEmployed: {
+        title: "Information for Self-Employed Individuals",
+        summary: "Understand mortgage requirements for self-employed applicants",
+        content: `
+            <p>Self-employed individuals have some unique considerations:</p>
+            <ul>
+                <li>You may need to provide 2-3 years of tax returns</li>
+                <li>Lenders will look at your average income over these years</li>
+                <li>A stable or increasing income is viewed positively</li>
+                <li>You might need to explain any significant fluctuations in income</li>
+                <li>Additional documentation like profit and loss statements may be required</li>
+            </ul>
+        `
+    },
     creditScore: {
         title: "Understanding Credit Scores",
-        summary: "Learn how credit scores affect your mortgage application.",
+        summary: "Learn how credit scores affect your mortgage application",
         content: `
             <p>Your credit score is a crucial factor in getting approved for a mortgage and determining your interest rate.</p>
             <ul>
                 <li>Scores range from 300 to 850</li>
                 <li>Higher scores indicate better creditworthiness</li>
+                <li>Most lenders require a minimum score of 620 for conventional loans</li>
+                <li>FHA loans may accept lower scores, sometimes as low as 580</li>
             </ul>
             <p>Credit score ranges:</p>
             <ul>
@@ -22,7 +49,7 @@ const educationalContent = {
     },
     mortgagePreApproval: {
         title: "Mortgage Pre-approval Basics",
-        summary: "Discover what you need for mortgage pre-approval.",
+        summary: "Discover what you need for mortgage pre-approval",
         content: `
             <p>Getting pre-approved for a mortgage gives you a clear idea of how much home you can afford and shows sellers you're a serious buyer.</p>
             <p>To get pre-approved, you'll typically need:</p>
@@ -37,7 +64,7 @@ const educationalContent = {
     },
     downPayment: {
         title: "Importance of Down Payments",
-        summary: "Understand how down payments affect your home purchase.",
+        summary: "Understand how down payments affect your home purchase",
         content: `
             <p>A down payment is the upfront amount you pay when purchasing a home. The typical down payment is 20% of the home's purchase price, but there are options for lower down payments:</p>
             <ul>
@@ -51,7 +78,7 @@ const educationalContent = {
     },
     closingCosts: {
         title: "Overview of Closing Costs",
-        summary: "Learn about the additional costs when finalizing your mortgage.",
+        summary: "Learn about the additional costs when finalizing your mortgage",
         content: `
             <p>Closing costs are fees associated with finalizing your mortgage, typically ranging from 2% to 5% of the loan amount.</p>
             <p>Common closing costs include:</p>
@@ -68,31 +95,23 @@ const educationalContent = {
     }
 };
 
-/**
- * Load educational content into the DOM
- */
-function loadEducationalContent() {
-    const contentContainer = document.getElementById('educationalContent');
-    if (!contentContainer) return;
-
-    for (const [key, value] of Object.entries(educationalContent)) {
-        const section = document.createElement('div');
-        section.className = 'education-item';
-        section.innerHTML = `
-            <h3>${value.title}</h3>
-            <p>${value.content}</p>
-        `;
-        contentContainer.appendChild(section);
+// Function to get relevant educational content based on employment status
+export function getEducationalContent(employmentStatus) {
+    let content = [];
+    
+    // Add employment-specific content
+    if (employmentStatus === "Employed" || employmentStatus === "Both employed and self-employed") {
+        content.push(educationalContent.employed);
     }
+    if (employmentStatus === "Self-employed" || employmentStatus === "Both employed and self-employed") {
+        content.push(educationalContent.selfEmployed);
+    }
+    
+    // Add general content for all employment statuses
+    content.push(educationalContent.creditScore);
+    content.push(educationalContent.mortgagePreApproval);
+    content.push(educationalContent.downPayment);
+    content.push(educationalContent.closingCosts);
+    
+    return content;
 }
-
-/**
- * Get specific educational content
- * @param {string} topic - The topic to retrieve content for
- * @returns {Object|null} The educational content object or null if not found
- */
-function getEducationalContent() {
-    return educationalContent;
-}
-
-export { loadEducationalContent, getEducationalContent };

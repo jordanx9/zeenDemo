@@ -1,8 +1,9 @@
+// Import necessary functions from other modules
 import { openModal, closeModal } from './modal.js';
 import { generateReadinessRoadmap } from './readiness-roadmap.js';
 import { getEducationalContent } from './educational-content.js';
 
-// Quiz questions
+// Define the quiz questions
 const quizQuestions = [
     {
         question: "What is your annual household income?",
@@ -39,25 +40,70 @@ const quizQuestions = [
 
 /**
  * Initialize the readiness quiz
+ * This function is called when the module is loaded
  */
 function initializeReadinessQuiz() {
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', showEducationalContent);
+        document.addEventListener('DOMContentLoaded', showEmploymentQuestion);
     } else {
-        showEducationalContent();
+        showEmploymentQuestion();
     }
 }
 
-function showEducationalContent() {
+/**
+ * Display the initial employment status question
+ */
+function showEmploymentQuestion() {
     const modalContent = document.querySelector('#modal1 .modal-content');
+    if (!modalContent) {
+        console.error('Modal content not found');
+        return;
+    }
+    
     modalContent.innerHTML = `
         <h2>Before We Begin</h2>
-        <p>Here's some helpful information about home buying. Feel free to explore these topics:</p>
+        <p>To provide you with the most relevant information, please tell us about your employment status:</p>
+        <form id="employmentForm">
+            <div class="form-group">
+                <label for="employmentStatus">What is your employment status?</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="employmentStatus" value="Employed" required> Employed</label>
+                    <label><input type="radio" name="employmentStatus" value="Self-employed" required> Self-employed</label>
+                    <label><input type="radio" name="employmentStatus" value="Both employed and self-employed" required> Both employed and self-employed</label>
+                    <label><input type="radio" name="employmentStatus" value="Unemployed" required> Unemployed</label>
+                    <label><input type="radio" name="employmentStatus" value="Retired" required> Retired</label>
+                </div>
+            </div>
+            <button type="submit" class="submit-button">Next</button>
+        </form>
+    `;
+
+    document.getElementById('employmentForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const employmentStatus = document.querySelector('input[name="employmentStatus"]:checked').value;
+        showEducationalContent(employmentStatus);
+    });
+}
+
+/**
+ * Display the educational content before starting the quiz
+ * @param {string} employmentStatus - The selected employment status
+ */
+function showEducationalContent(employmentStatus) {
+    const modalContent = document.querySelector('#modal1 .modal-content');
+    if (!modalContent) {
+        console.error('Modal content not found');
+        return;
+    }
+    
+    modalContent.innerHTML = `
+        <h2>Before We Begin</h2>
+        <p>Here's some helpful information about home buying based on your employment status. Feel free to explore these topics:</p>
         <div id="educationalCards"></div>
         <button id="startQuiz" class="submit-button">I'm Ready to Start the Quiz</button>
     `;
 
-    const educationalContent = getEducationalContent();
+    const educationalContent = getEducationalContent(employmentStatus);
     const cardsContainer = document.getElementById('educationalCards');
 
     for (const [key, value] of Object.entries(educationalContent)) {
@@ -72,10 +118,21 @@ function showEducationalContent() {
         cardsContainer.appendChild(card);
     }
 
-    document.getElementById('startQuiz').addEventListener('click', createQuiz);
+    document.getElementById('startQuiz').addEventListener('click', () => createQuiz(employmentStatus));
 }
 
+/**
+ * Show detailed content for a specific educational topic
+ * @param {string} key - The key of the educational content
+ * @param {Object} content - The content object containing title and detailed content
+ */
 function showDetailedContent(key, content) {
+    const modalContent = document.querySelector('#modal1 .modal-content');
+    if (!modalContent) {
+        console.error('Modal content not found');
+        return;
+    }
+
     const detailedContent = document.createElement('div');
     detailedContent.className = 'detailed-content';
     detailedContent.innerHTML = `
@@ -84,7 +141,6 @@ function showDetailedContent(key, content) {
         <button class="back-button">Back to Topics</button>
     `;
 
-    const modalContent = document.querySelector('#modal1 .modal-content');
     modalContent.appendChild(detailedContent);
 
     detailedContent.querySelector('.back-button').addEventListener('click', () => {
@@ -98,24 +154,36 @@ function showDetailedContent(key, content) {
 
 /**
  * Create the quiz structure in the DOM
+ * @param {string} employmentStatus - The selected employment status
  */
-function createQuiz() {
+function createQuiz(employmentStatus) {
     const modalContent = document.querySelector('#modal1 .modal-content');
+    if (!modalContent) {
+        console.error('Modal content not found');
+        return;
+    }
+
     modalContent.innerHTML = `
         <h2>Stage 1: Buyer Readiness</h2>
         <form id="readinessQuiz"></form>
     `;
 
     const quizContainer = document.getElementById('readinessQuiz');
+    if (!quizContainer) {
+        console.error('Quiz container not found');
+        return;
+    }
 
     quizQuestions.forEach((q, index) => {
-        const questionDiv = document.createElement('div');
-        questionDiv.className = 'form-group';
-        questionDiv.innerHTML = `
-            <label for="${q.id}">${q.question}</label>
-            ${createInputElement(q, index)}
-        `;
-        quizContainer.appendChild(questionDiv);
+        if (shouldShowQuestion(q, employmentStatus)) {
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'form-group';
+            questionDiv.innerHTML = `
+                <label for="${q.id}">${q.question}</label>
+                ${createInputElement(q, index)}
+            `;
+            quizContainer.appendChild(questionDiv);
+        }
     });
 
     const submitButton = document.createElement('button');
@@ -124,15 +192,28 @@ function createQuiz() {
     submitButton.textContent = 'Submit';
     quizContainer.appendChild(submitButton);
 
-    quizContainer.addEventListener('submit', handleQuizSubmission);
+    quizContainer.addEventListener('submit', (e) => handleQuizSubmission(e, employmentStatus));
 
-    // Add event listener for credit score range input
     const creditScoreInput = document.getElementById('creditScore');
     if (creditScoreInput) {
         const creditScoreOutput = creditScoreInput.nextElementSibling;
         creditScoreInput.addEventListener('input', function() {
             creditScoreOutput.value = this.value;
         });
+    }
+}
+
+/**
+ * Determine if a question should be shown based on the employment status
+ * @param {Object} question - The question object
+ * @param {string} employmentStatus - The selected employment status
+ * @returns {boolean} Whether the question should be shown
+ */
+function shouldShowQuestion(question, employmentStatus) {
+    if (employmentStatus === 'Employed' || employmentStatus === 'Self-employed' || employmentStatus === 'Both employed and self-employed') {
+        return true;
+    } else {
+        return question.id !== 'income';
     }
 }
 
@@ -178,12 +259,14 @@ function createInputElement(question, index) {
 /**
  * Handle the quiz submission
  * @param {Event} e - The submit event
+ * @param {string} employmentStatus - The selected employment status
  */
-function handleQuizSubmission(e) {
+function handleQuizSubmission(e, employmentStatus) {
     e.preventDefault();
     const formData = new FormData(e.target);
     const quizResults = {
-        income: parseInt(formData.get('income')),
+        employmentStatus: employmentStatus,
+        income: parseInt(formData.get('income')) || 0,
         creditScore: parseInt(formData.get('creditScore')),
         savings: parseInt(formData.get('savings')),
         buyingKnowledge: formData.get('buyingKnowledge'),
@@ -202,9 +285,8 @@ function handleQuizSubmission(e) {
  * @param {Object} roadmap - The generated roadmap object
  */
 function displayRoadmap(roadmap) {
-    // Implementation for displaying the roadmap
     console.log('Roadmap:', roadmap);
-    // This function would update the DOM to show the roadmap to the user
+    // TODO: Implement actual DOM updates to display the roadmap
 }
 
 export { initializeReadinessQuiz };
